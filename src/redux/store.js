@@ -20,7 +20,7 @@ import phonebookReducer from './phoneBookReducer';
 const middleware = [
   ...getDefaultMiddleware({
     serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER], //fix persist
     },
   }),
 
@@ -38,8 +38,6 @@ const store = configureStore({
     contacts: persistReducer(phonebookPersistConfig, phonebookReducer),
   },
   middleware,
-
-  devTools: process.env.NODE_ENV === 'development',
 });
 
 const persistor = persistStore(store);
