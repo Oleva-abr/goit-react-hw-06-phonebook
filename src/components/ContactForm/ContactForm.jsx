@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
 import PropTypes from 'prop-types';
 import style from './contactForm.module.css';
+import { connect } from 'react-redux';
+import actions from '../../redux/phoneBookAction';
 
 class ContactForm extends Component {
   static propTypes = {
@@ -13,9 +15,6 @@ class ContactForm extends Component {
     number: '',
   };
 
-  createIdName = uuidv4();
-  createIdNumber = uuidv4();
-
   handleInputChange = e => {
     const { name, value } = e.currentTarget;
 
@@ -24,8 +23,9 @@ class ContactForm extends Component {
 
   submitContact = e => {
     e.preventDefault();
-
-    this.props.OnSubmit(this.state);
+    const { name, number } = this.state;
+    const { contacts, onSubmit } = this.props;
+    onSubmit(this.state);
     this.reset();
   };
 
@@ -68,4 +68,13 @@ class ContactForm extends Component {
     );
   }
 }
-export default ContactForm;
+
+const mapStateToProps = state => ({
+  contacts: state.contacts.items,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (name, number) => dispatch(actions.addContact(name, number)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
